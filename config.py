@@ -4,15 +4,13 @@ import os
 from requests.api import get
 from googlesearch import search
 from datetime import date, datetime
-import keyboard
-import sys
 
 
 
 
 version = "1.0.0"
 cidade = 'sao+paulo'
-caminho_navegador = "C:/Program Files/Google/Chrome/Application/chrome.exe %s"
+caminho_navegador = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Brave.exe %s"
 caminho_jogos = "C:/Program Files (x86)/Steam/Steam.exe"
 
 def intro():
@@ -119,17 +117,17 @@ def clima_tempo():
 
     infos = rq.get(url).json()
 
-    longitude = infos['coord']['lon']
-    latitude = infos['coord']['lat']
+    longitude = infos['coord']['lon'] # Longitude
+    latitude = infos['coord']['lat'] # Latitude
     temp = infos['main']['temp'] - 273.15 # Kelvin para Celcius
     pressao_atm = infos['main']['pressure'] / 1013.25 #Libras para ATM
     humidade = infos['main']['humidity'] #Recebe em porcentagem
     temp_max = infos['main']['temp_max'] - 273.15 # Kelvin para Celcius
     temp_min = infos['main']['temp_min'] - 273.15 # Kelvin para Celcius
-    v_speed = infos['wind']['speed']
-    v_direc = infos['wind']['deg']
-    nebulosidade = infos['clouds']['all']
-    id_da_cidade = infos['id']
+    v_speed = infos['wind']['speed'] # vento ventante
+    v_direc = infos['wind']['deg'] # direção do vento
+    nebulosidade = infos['clouds']['all'] # nebulosidade atual
+    id_da_cidade = infos['id'] 
 
     return [longitude, latitude, temp,
             pressao_atm, humidade,
@@ -145,6 +143,7 @@ def temperatura():
     return [temp_atual, temp_max, temp_min]
 
 def abrir(fala):
+    print(fala)
     try:
         if "Google" in fala:
             web.get(caminho_navegador).open("google.com.br/")
@@ -169,11 +168,16 @@ def abrir(fala):
             os.startfile("C:/Riot Games/League of Legends/LeagueClient.exe")
             return None
         elif "Facebook" in fala:
-            web.get(caminho_navegador).open("facebook.com.br/")
+            try:
+                web.get(caminho_navegador).open("https://www.facebook.com/")
+            except:
+                print('Não consegui abrir o site')
             return None
         elif "Linkedin" in fala:
-            web.get(caminho_navegador).open("https://www.linkedin.com/")
-            
+            try:
+                web.get(caminho_navegador).open("https://www.linkedin.com/feed/")
+            except:
+                print('Não consegui abrir o site')
         elif "Instagram" in fala:
             web.get(caminho_navegador).open("instagram.com/")
             return None
@@ -183,6 +187,7 @@ def abrir(fala):
 
 
 def pesquisa(fala):
+    print(fala)
     if fala.startswith("pesquisa"):
         fala = fala.replace("pesquisa", "")
     try:
@@ -193,6 +198,7 @@ def pesquisa(fala):
         print("Houve um erro na pesquisa")
     
 def anotar(fala):
+    print(fala)
 
     data_atual = date.today()
     data_format = "{}/{}".format(data_atual.day, data_atual.month)
